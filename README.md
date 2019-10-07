@@ -1,5 +1,1 @@
-![Logo](./logo.png)
-
-# requtrap.go
-Fast Configurable API Gateway Written Using Go
-
+![REQUTRAP](./doc/images/banner.png)
