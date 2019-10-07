@@ -1,1 +1,1 @@
-![REQUTRAP](./doc/images/banner.png)
+![REQUTRAP](./assets/images/banner.png)
