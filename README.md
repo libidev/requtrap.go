@@ -30,3 +30,9 @@ gateway:
 
 ### More
 `requtrap help [command]`
+
+## Contribution
+Please make sure to read the [Contributing Guide](./CONTRIBUTING.md) before making a pull request.
+
+## License
+[MIT](./LICENSE)
