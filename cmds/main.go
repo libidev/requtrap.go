@@ -46,7 +46,7 @@ func main() {
   b,err:= yaml.Marshal(&t) 
   if err != nil {return}
 
-  f,err := os.Create("default_config_example.yaml")
+  f,err := os.Create("requtrap_example.yaml")
   if err != nil {return}
   fmt.Fprintf(f,string(b))
   err = f.Close() 
