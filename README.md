@@ -1,4 +1,4 @@
-![REQUTRAP](./assets/images/banner.png)
+![REQUTRAP](./docs/assets/images/banner.png)
 
 API Gateway is service that handle all request from client and forward to any services.
 More detail about API Gateway, you can see [here](https://www.nginx.com/learn/api-gateway/).
