@@ -18,13 +18,10 @@ var(
     url: /test
     addr: http://127.0.0.1:8000
   
-
   #gateway example 2
   request:
     url: /coba
     addr: http://127.0.0.1:8080
-
-
   `
 )
 
@@ -33,6 +30,11 @@ func isError(err error){
   if err != nil {
     log.Fatal("error: %v",err)
   }
+}
+
+type ConfigYaml struct{
+  Host string `yaml:"host"`
+  
 }
 
 func main() {
