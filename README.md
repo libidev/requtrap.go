@@ -5,7 +5,7 @@ More detail about API Gateway, you can see [here](https://www.nginx.com/learn/ap
 
 RequTrap will help you in implementing API Gateway. It is simple and fast, you can use it easily, sure.
 
-## Configuration
+# Configuration
 You can configure RequTrap by creating a YAML file which 
 contain configuration schema. It will look like example below.
 
@@ -21,7 +21,7 @@ gateway:
       upstream: http://127.0.0.1:8002
 ```
 
-## CLI Commands
+# CLI Commands
 ### Starting API Gateway
 `requtrap start [path/to/configuration.yml]`
 
@@ -31,7 +31,7 @@ gateway:
 ### More
 `requtrap help [command]`
 
-## Contribution
+# Contribution
 Please make sure to read the [Contributing Guide](./CONTRIBUTING.md) before making a pull request.
 
 ## License
