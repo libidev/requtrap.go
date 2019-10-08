@@ -10,21 +10,16 @@ import (
 
 var(
   Default = `
-  #server
-  host: "8080"
-
-  #gateway example 1
-  request:
-    url: /test
-    addr: http://127.0.0.1:8000
-  
-  #gateway example 2
-  request:
-    url: /coba
-    addr: http://127.0.0.1:8080
+    name: book-store
+    host: 127.0.0.1
+    port: 8080
+    services:
+      - path: /books
+        upstream: http://127.0.0.1:8001
+      - path: /authors
+        upstream: http://127.0.0.1:8002
   `
 )
-
 
 func isError(err error){
   if err != nil {
