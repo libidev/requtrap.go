@@ -1,21 +1,21 @@
 package cli
 
 import (
-	"strings"
+	// "strings"
 )
 
 type Errs []error
 
-func (list Errs)error() string{
-	if len(list) == 0{
-		return ""
-	}
+// func (list Errs)error() string{
+// 	if len(list) == 0{
+// 		return ""
+// 	}
 
-	output := make([]string,len(list))
+// 	output := make([]string,len(list))
 
-	for i := range list{
-		output[i] = list[i].Error()
-	}
+// 	for i := range list{
+// 		output[i] = list[i].Error()
+// 	}
 
-	return strings.Join(output)
-}
+// 	return strings.Join(output)
+// }
