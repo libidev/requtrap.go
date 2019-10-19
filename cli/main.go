@@ -2,9 +2,11 @@ package cli
 
 import (
   "fmt"
+
   "github.com/libidev/requtrap.go/cli/action"
   "github.com/libidev/requtrap.go/cli/config"
   "github.com/libidev/requtrap.go/cli/errors"
+  "github.com/libidev/requtrap.go/http"
 )
 
 func Parse(args []string) {
@@ -19,6 +21,7 @@ func Parse(args []string) {
 				config, err := config.Parse(args[1])
 				if err != nil {return}
 				action.Start(config)
+        http.StartingServe(config)
 			} else {
 				fmt.Println("Config file not specified")
 			}
