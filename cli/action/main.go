@@ -2,7 +2,6 @@ package action
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
   "github.com/libidev/requtrap.go/cli/config"
 )
 
@@ -32,7 +31,5 @@ Example:
 }
 
 func Start(conf *config.ConfigYaml) {
-	fmt.Println("start")
-	d, _ := yaml.Marshal(conf)
-	fmt.Println(d)
+	fmt.Printf("Starting %s on http://%s:%d\n", conf.Name, conf.Host, conf.Port)
 }
