@@ -1,20 +1,15 @@
 package main
 
 import (
-  "log"
   "os"
-  "github.com/libidev/requtrap.go/cli"
-)
 
-func isError(err error){
-  if err != nil {
-    log.Fatal("error: %v",err)
-  }
-}
+  "github.com/libidev/requtrap.go/cli"
+  "github.com/libidev/requtrap.go/cli/errors"
+)
 
 func main() {
   var err error
-  defer isError(err)
+  defer errors.IsError(err)
 
   cli.Parse(os.Args[1:])
 

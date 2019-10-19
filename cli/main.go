@@ -1,21 +1,15 @@
 package cli
 
 import (
-	"fmt"
-	"log"
+  "fmt"
   "github.com/libidev/requtrap.go/cli/action"
   "github.com/libidev/requtrap.go/cli/config"
+  "github.com/libidev/requtrap.go/cli/errors"
 )
-
-func isError(err error){
-  if err != nil {
-    log.Fatal("error: %v",err)
-  }
-}
 
 func Parse(args []string) {
 	var err error
-	defer isError(err)
+  defer errors.IsError(err)
 
 	if len(args) >= 1 {
 		if args[0] == "help" {
