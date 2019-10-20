@@ -1,7 +1,8 @@
-package cli
+package errors
 
 import (
 	// "strings"
+  "log"
 )
 
 type Errs []error
@@ -19,3 +20,9 @@ type Errs []error
 
 // 	return strings.Join(output)
 // }
+
+func IsError(err error){
+  if err != nil{
+    log.Fatal(err)
+  }
+}
