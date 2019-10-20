@@ -2,7 +2,8 @@ package action
 
 import (
 	"fmt"
-  "github.com/libidev/requtrap.go/cli/config"
+	"github.com/libidev/requtrap.go/cli/config"
+  "github.com/libidev/requtrap.go/http"	
 )
 
 func Help() {
@@ -31,5 +32,5 @@ Example:
 }
 
 func Start(conf *config.ConfigYaml) {
-	fmt.Printf("Starting %s on http://%s:%d\n", conf.Name, conf.Host, conf.Port)
+  http.Serve(conf);
 }
