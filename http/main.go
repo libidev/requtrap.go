@@ -8,29 +8,35 @@ import (
   "github.com/libidev/requtrap.go/cli/config"
 )
 
-func StartingServe(conf *config.ConfigYaml){
-  var port = ":" + strconv.Itoa(conf.Port)
-
-  fmt.Printf("running server in %s%s\n",conf.Host,port)
-  http.ListenAndServe(port,nil)
+type HttpHandler struct {
+  Routes []config.ConfigService
 }
 
+func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+  fmt.Println(h.GetRequestMethod(r))
+  fmt.Println("Routes:")
+  fmt.Println(h.Routes)
+  fmt.Println("")
+}
 
-func CheckRequestMethod(w http.ResponseWriter, r *http.Request){
-  
-  if r.Method == http.MethodGet{
-    fmt.Println("====> get")
-    //TODO
-  }else if r.Method == http.MethodPost{
-    fmt.Println("====> post")
-    //TODO
-  }else if r.Method == http.MethodPut{
-    fmt.Println("====> put")
-    //TODO
-  }else if r.Method == http.MethodDelete{
-    fmt.Println("====> delete")
-    //TODO
-  }else{
-    fmt.Println("====> method undefined")
+func (h *HttpHandler) GetRequestMethod(r *http.Request) string {
+  return r.Method
+}
+
+func (h *HttpHandler) AddRoute(service config.ConfigService) {
+  h.Routes = append(h.Routes, service)
+}
+
+func Serve(conf *config.ConfigYaml){
+  var host = conf.Host
+  var port = strconv.Itoa(conf.Port)
+  var uri  = host + ":" + port
+
+  fmt.Printf("%s running on http://%s\n", conf.Name, uri)
+
+  handler := &HttpHandler{}
+  for _, service := range conf.Services {
+    handler.AddRoute(service)
   }
+  http.ListenAndServe(uri, handler)
 }
