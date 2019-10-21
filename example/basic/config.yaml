@@ -1,0 +1,8 @@
+name: book-store
+host: 127.0.0.1
+port: 8080
+services:
+  - path: /books
+    upstream: http://127.0.0.1:8001
+  - path: /authors
+    upstream: http://127.0.0.1:8002

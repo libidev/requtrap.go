@@ -28,8 +28,9 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
           DisableCompression: true,
         }
 
+        url := service.Upstream + service.Path
         client := &http.Client{Transport: tr}
-        resp, err := client.Get(service.Upstream)
+        resp, err := client.Get(url)
         if err!=nil{
           log.Fatal(err)
         }else{
