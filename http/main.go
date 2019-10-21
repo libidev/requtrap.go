@@ -1,8 +1,8 @@
 package http
 
-
 import (
   "fmt"
+  "log"
   "strconv"
   "net/http"
   "github.com/libidev/requtrap.go/cli/config"
@@ -12,11 +12,18 @@ type HttpHandler struct {
   Routes []config.ConfigService
 }
 
+
 func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-  fmt.Println(h.GetRequestMethod(r))
-  fmt.Println("Routes:")
-  fmt.Println(h.Routes)
-  fmt.Println("")
+  //fmt.Println(h.GetRequestMethod(r))
+
+  if r.URL.Path != "favicon.ico"{
+    for _, service := range h.Routes{
+      if r.URL.Path == service.Path{
+        //GATEWAY
+        fmt.Printf("redirect to : %v\n",service.Upstream)
+      }
+    }
+  }
 }
 
 func (h *HttpHandler) GetRequestMethod(r *http.Request) string {
@@ -38,5 +45,9 @@ func Serve(conf *config.ConfigYaml){
   for _, service := range conf.Services {
     handler.AddRoute(service)
   }
-  http.ListenAndServe(uri, handler)
+
+  err := http.ListenAndServe(uri, handler)
+  if err != nil{
+    log.Fatal(err)
+  }
 }
