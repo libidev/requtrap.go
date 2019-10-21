@@ -9,6 +9,7 @@ import (
 )
 
 func StartingServe(conf *config.ConfigYaml){
+
   var port = ":" + strconv.Itoa(conf.Port)
 
   fmt.Printf("running server in %s%s\n",conf.Host,port)
