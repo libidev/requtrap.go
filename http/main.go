@@ -6,7 +6,7 @@ import (
   "io/ioutil"
   "time"
   "strconv"
-  //"encoding/json"
+  "encoding/json"
   "net/http"
   "github.com/libidev/requtrap.go/cli/config"
 )
@@ -41,11 +41,20 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
               log.Fatal(err)
             }
 
-            fmt.Println(string(contents))
+            var result map[string]interface{}
+            err = json.Unmarshal(contents,&result)
+            if err != nil{
+              log.Fatal(err)
+            }
+            fmt.Printf("\nredirect to : %s\n",service.Upstream)
+            fmt.Println("response :")
+
+            js, err := json.Marshal(result)
+            fmt.Println(string(js))
+            w.Header().Set("Content-Type", "application/json")
+            w.Write(js)
           }
         }
-
-        fmt.Printf("redirect to : %v\n",service.Upstream)
       }
     }
   }
