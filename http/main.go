@@ -3,7 +3,10 @@ package http
 import (
   "fmt"
   "log"
+  "io/ioutil"
+  "time"
   "strconv"
+  //"encoding/json"
   "net/http"
   "github.com/libidev/requtrap.go/cli/config"
 )
@@ -12,7 +15,6 @@ type HttpHandler struct {
   Routes []config.ConfigService
 }
 
-
 func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   //fmt.Println(h.GetRequestMethod(r))
 
@@ -20,6 +22,29 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     for _, service := range h.Routes{
       if r.URL.Path == service.Path{
         //GATEWAY
+        tr := &http.Transport{
+          MaxIdleConns:       10,
+          IdleConnTimeout:    30 * time.Second,
+          DisableCompression: true,
+        }
+
+        client := &http.Client{Transport: tr}
+        resp, err := client.Get(service.Upstream)
+        if err!=nil{
+          log.Fatal(err)
+        }else{
+          defer resp.Body.Close()
+
+          if resp.StatusCode == http.StatusOK{
+            contents, err := ioutil.ReadAll(resp.Body)
+            if err != nil{
+              log.Fatal(err)
+            }
+
+            fmt.Println(string(contents))
+          }
+        }
+
         fmt.Printf("redirect to : %v\n",service.Upstream)
       }
     }
