@@ -10,6 +10,7 @@ import (
   "encoding/json"
   "net/http"
   "github.com/libidev/requtrap.go/cli/config"
+  "github.com/libidev/requtrap.go/cli/errors"
 )
 
 type HttpHandler struct {
@@ -17,12 +18,12 @@ type HttpHandler struct {
 }
 
 func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-  //fmt.Println(h.GetRequestMethod(r))
+  var err error
+  defer errors.IsError(err)
 
   if r.URL.Path != "favicon.ico"{
     for _, service := range h.Routes{
       if r.URL.Path == service.Path{
-        //GATEWAY
         tr := &http.Transport{
           MaxIdleConns:       10,
           IdleConnTimeout:    30 * time.Second,
@@ -32,46 +33,52 @@ func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         url := service.Upstream + service.Path
         client := &http.Client{Transport: tr}
         if h.GetRequestMethod(r) == "GET"{
+
+
           resp, err := client.Get(url)
-          if err!=nil{
-            log.Fatal(err)
-          }else{
-            defer resp.Body.Close()
+          if err!=nil{return}
 
-            if resp.StatusCode == http.StatusOK{
-              contents, err := ioutil.ReadAll(resp.Body)
-              if err != nil{
-                log.Fatal(err)
-              }
+          defer resp.Body.Close()
 
-              var result []map[string]interface{}
-              err = json.Unmarshal(contents,&result)
-              if err != nil{
-                log.Fatal(err)
-              }
-              fmt.Printf("\nredirect to : %s\n",service.Upstream)
-              fmt.Println("response :")
-              js, err := json.Marshal(result)
-              fmt.Println(string(js))
-              w.Header().Set("Content-Type", "application/json")
-              w.Write(js)
+          if resp.StatusCode == http.StatusOK{
+            contents, err := ioutil.ReadAll(resp.Body)
+            if err != nil{
+              http.Error(w,err.Error(),http.StatusInternalServerError)
+              return
             }
+
+            var result []map[string]interface{}
+
+            if err := json.Unmarshal(contents,&result); err != nil{
+              http.Error(w,err.Error(),http.StatusInternalServerError)
+              return
+            }
+
+            js, err := json.Marshal(result)
+
+            fmt.Printf("\nredirect to : %s\n",service.Upstream)
+            fmt.Println("response :")
+            fmt.Println(string(js))
+
+            w.Header().Set("Content-Type", "application/json")
+            w.Write(js)
           }
         }else if h.GetRequestMethod(r) == "POST"{
-          
+
           var jsonStr ,err = ioutil.ReadAll(r.Body)
           if err != nil {
-            log.Fatal(err)
+            http.Error(w,err.Error(),http.StatusInternalServerError)
+            return
           }
-          
 
-          req, err := http.NewRequest("POST",url,bytes.NewBuffer([]byte(jsonStr)))
+          req, _ := http.NewRequest("POST",url,bytes.NewBuffer([]byte(jsonStr)))
           req.Header.Set("X-Custom-Header","myvalue")
           req.Header.Set("Content-type","application/json")
 
           resp, err := client.Do(req)
           if err != nil{
-            log.Fatal(err)
+            http.Error(w,err.Error(),http.StatusInternalServerError)
+            return
           }
           defer resp.Body.Close()
 
