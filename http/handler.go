@@ -11,6 +11,7 @@ import (
 
 type HttpHandler struct {
 	Routes []config.ConfigService
+	Cors config.ConfigCors
 }
 
 func (h HttpHandler) GetRequestMethod(r *http.Request) string {
@@ -22,6 +23,14 @@ func (h *HttpHandler) AddRoute(service config.ConfigService) {
 }
 
 func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if h.Cors.Enable {
+		EnableCors(&w, h.Cors)
+	}
+
+	if r.Method == http.MethodOptions {
+		return
+	}
+
 	if r.URL.Path != "favicon.ico" {
 		for _, service := range h.Routes {
 			path := r.URL.Path

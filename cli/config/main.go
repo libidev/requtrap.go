@@ -14,7 +14,7 @@ type ConfigService struct {
 type ConfigCors struct {
 	Enable   	bool 			`yaml:"enable"`
 	Methods  	[]string 	`yaml:"methods"`
-	WhiteList	[]string 	`yaml:"white-list"`
+	Origins	[]string 	`yaml:"origins"`
 }
 
 type ConfigYaml struct {

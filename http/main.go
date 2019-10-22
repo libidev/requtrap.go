@@ -19,6 +19,7 @@ func Serve(conf *config.ConfigYaml) {
 	for _, service := range conf.Services {
 		handler.AddRoute(service)
 	}
+	handler.Cors = conf.Cors
 
 	err := http.ListenAndServe(uri, handler)
 	if err != nil {
