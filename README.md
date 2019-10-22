@@ -5,6 +5,8 @@ More detail about API Gateway, you can see [here](https://www.nginx.com/learn/ap
 
 RequTrap will help you in implementing API Gateway. It is simple and fast, you can use it easily, sure.
 
+![example](./docs/assets/images/example.gif)
+
 # Configuration
 You can configure RequTrap by creating a YAML file which 
 contain configuration schema. It will look like example below.
