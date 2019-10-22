@@ -2,7 +2,7 @@ package errors
 
 import (
 	// "strings"
-  "log"
+	"log"
 )
 
 type Errs []error
@@ -21,8 +21,8 @@ type Errs []error
 // 	return strings.Join(output)
 // }
 
-func IsError(err error){
-  if err != nil{
-    log.Fatal(err)
-  }
+func IsError(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
