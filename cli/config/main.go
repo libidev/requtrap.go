@@ -43,7 +43,7 @@ var (
 				- PUT
 				- DELETE
 			white-list:
-				http://localhost:3000
+				- http://localhost:3000
 	`
 
 	config = ConfigYaml{}
