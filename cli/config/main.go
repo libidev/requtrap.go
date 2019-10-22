@@ -1,25 +1,25 @@
 package config
 
 import (
+	"github.com/libidev/requtrap.go/cli/errors"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
-  "gopkg.in/yaml.v3"
-  "github.com/libidev/requtrap.go/cli/errors"
 )
 
 type ConfigService struct {
-  Path string `yaml:"path"`
-  Upstream string `yaml:"upstream"`
+	Path     string `yaml:"path"`
+	Upstream string `yaml:"upstream"`
 }
 
-type ConfigYaml struct{
-  Name string `yaml:"name"`
-	Host string `yaml:"host"`
-	Port int `yaml:"port"`
-  Services []ConfigService `yaml:"services"`
+type ConfigYaml struct {
+	Name     string          `yaml:"name"`
+	Host     string          `yaml:"host"`
+	Port     int             `yaml:"port"`
+	Services []ConfigService `yaml:"services"`
 }
 
-var(
-  Default = `
+var (
+	Default = `
     name: book-store
     host: 127.0.0.1
     port: 8080
@@ -29,7 +29,7 @@ var(
       - path: /authors
         upstream: http://127.0.0.1:8002
 	`
-	
+
 	config = ConfigYaml{}
 )
 
@@ -38,10 +38,14 @@ func Parse(confile string) (*ConfigYaml, error) {
 	defer errors.IsError(err)
 
 	f, err := ioutil.ReadFile(confile)
-	if err != nil {return nil, err}
-	
-  err = yaml.Unmarshal([]byte(f), &config)
-  if err != nil {return nil, err}
+	if err != nil {
+		return nil, err
+	}
+
+	err = yaml.Unmarshal([]byte(f), &config)
+	if err != nil {
+		return nil, err
+	}
 
 	return &config, nil
 }
