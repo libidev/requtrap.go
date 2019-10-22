@@ -2,6 +2,7 @@ package main
 
 import (
   "log"
+  "fmt"
   "net/http"
   "encoding/json"
   "io/ioutil"
@@ -53,6 +54,8 @@ func getBooks(w http.ResponseWriter, r *http.Request){
 
 
 func main(){
+  port := ":8001"
   http.HandleFunc("/books", getBooks)
-  http.ListenAndServe(":8001", nil)
+  fmt.Printf("book service running on http://localhost:%s", port)
+  http.ListenAndServe(port, nil)
 }
