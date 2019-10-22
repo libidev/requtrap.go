@@ -15,6 +15,7 @@ type Book struct{
 var books []Book
 
 func getBooks(w http.ResponseWriter, r *http.Request){
+  var response []byte
   if r.Method == http.MethodGet {
     // GET
     js, err := json.Marshal(books)
@@ -23,9 +24,7 @@ func getBooks(w http.ResponseWriter, r *http.Request){
       log.Fatal(err)
       return
     }
-  
-    w.Header().Set("Content-Type", "application/json")
-    w.Write(js)
+    response = js
   } else if r.Method == http.MethodPost {
     // POST
     body, err := ioutil.ReadAll(r.Body)
@@ -44,10 +43,12 @@ func getBooks(w http.ResponseWriter, r *http.Request){
     }
 
     books = append(books, book)
-  
-    w.Header().Set("Content-Type", "application/json")
-    w.Write([]byte("OK"))
+    response = []byte("OK")
   }
+
+  // send response
+  w.Header().Set("Content-Type", "application/json")
+  w.Write(response)
 }
 
 
