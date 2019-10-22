@@ -11,11 +11,18 @@ type ConfigService struct {
 	Upstream string `yaml:"upstream"`
 }
 
+type ConfigCors struct {
+	Enable   	bool 			`yaml:"enable"`
+	Methods  	[]string 	`yaml:"methods"`
+	WhiteList	[]string 	`yaml:"white-list"`
+}
+
 type ConfigYaml struct {
-	Name     string          `yaml:"name"`
-	Host     string          `yaml:"host"`
-	Port     int             `yaml:"port"`
-	Services []ConfigService `yaml:"services"`
+	Name     string          	`yaml:"name"`
+	Host     string          	`yaml:"host"`
+	Port     int             	`yaml:"port"`
+	Services []ConfigService 	`yaml:"services"`
+	Cors     ConfigCors			 	`yaml:"cors"`
 }
 
 var (
@@ -27,7 +34,16 @@ var (
       - path: /books
         upstream: http://127.0.0.1:8001
       - path: /authors
-        upstream: http://127.0.0.1:8002
+				upstream: http://127.0.0.1:8002
+		cors:
+			enable: true
+			methods:
+				- GET
+				- POST
+				- PUT
+				- DELETE
+			white-list:
+				http://localhost:3000
 	`
 
 	config = ConfigYaml{}
