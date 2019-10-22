@@ -16,7 +16,7 @@ type HttpHandler struct {
   Routes []config.ConfigService
 }
 
-func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   //fmt.Println(h.GetRequestMethod(r))
 
   if r.URL.Path != "favicon.ico"{
@@ -44,14 +44,13 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
                 log.Fatal(err)
               }
 
-              var result map[string]interface{}
+              var result []map[string]interface{}
               err = json.Unmarshal(contents,&result)
               if err != nil{
                 log.Fatal(err)
               }
               fmt.Printf("\nredirect to : %s\n",service.Upstream)
               fmt.Println("response :")
-
               js, err := json.Marshal(result)
               fmt.Println(string(js))
               w.Header().Set("Content-Type", "application/json")
@@ -60,10 +59,11 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
           }
         }else if h.GetRequestMethod(r) == "POST"{
           
-          var jsonStr ,err = json.Marshal(r.Body)
+          var jsonStr ,err = ioutil.ReadAll(r.Body)
           if err != nil {
             log.Fatal(err)
           }
+          
 
           req, err := http.NewRequest("POST",url,bytes.NewBuffer([]byte(jsonStr)))
           req.Header.Set("X-Custom-Header","myvalue")
@@ -85,7 +85,7 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func (h *HttpHandler) GetRequestMethod(r *http.Request) string {
+func (h HttpHandler) GetRequestMethod(r *http.Request) string {
   return r.Method
 }
 
