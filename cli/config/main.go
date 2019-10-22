@@ -42,7 +42,7 @@ var (
 				- POST
 				- PUT
 				- DELETE
-			white-list:
+			origins:
 				- http://localhost:3000
 	`
 
