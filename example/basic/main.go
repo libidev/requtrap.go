@@ -22,7 +22,6 @@ func getBooks(w http.ResponseWriter, r *http.Request) {
 		js, err := json.Marshal(books)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Fatal(err)
 			return
 		}
 		response = js
@@ -39,7 +38,6 @@ func getBooks(w http.ResponseWriter, r *http.Request) {
 		err = json.Unmarshal(body, &book)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Fatal(err)
 			return
 		}
 
