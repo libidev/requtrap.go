@@ -53,7 +53,6 @@ func getBooks(w http.ResponseWriter, r *http.Request){
 
 
 func main(){
-  books = append(books, Book{"Hello", 18})
   http.HandleFunc("/books", getBooks)
   http.ListenAndServe(":8001", nil)
 }
