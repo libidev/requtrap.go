@@ -22,6 +22,22 @@ services:
     upstream: http://127.0.0.1:8002
 ```
 
+If you want to configure CORS, just put example bellow
+at bottom of YAML configuration file.
+
+```yml
+...
+cors:
+  enable: true
+  methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+  white-list:
+    http://localhost:3000
+```
+
 # CLI Commands
 ### Starting API Gateway
 `requtrap start [path/to/configuration.yml]`
