@@ -15,7 +15,7 @@ type HttpHandler struct {
   Routes []config.ConfigService
 }
 
-func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   //fmt.Println(h.GetRequestMethod(r))
 
   if r.URL.Path != "favicon.ico"{
@@ -51,7 +51,7 @@ func (h *HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   }
 }
 
-func (h *HttpHandler) GetRequestMethod(r *http.Request) string {
+func (h HttpHandler) GetRequestMethod(r *http.Request) string {
   return r.Method
 }
 
