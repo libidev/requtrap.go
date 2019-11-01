@@ -1,5 +1,8 @@
 ![REQUTRAP](./docs/assets/images/banner.png)
 
+[![Go Report](https://goreportcard.com/badge/github.com/libidev/requtrap.go)](https://goreportcard.com/report/github.com/libidev/requtrap.go)
+![Downloaded](https://img.shields.io/github/downloads/libidev/requtrap.go/total)
+
 API Gateway is service that handle all request from client and forward to any services.
 More detail about API Gateway, you can see [here](https://www.nginx.com/learn/api-gateway/).
 
