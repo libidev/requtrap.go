@@ -12,17 +12,17 @@ type ConfigService struct {
 }
 
 type ConfigCors struct {
-	Enable   	bool 			`yaml:"enable"`
-	Methods  	[]string 	`yaml:"methods"`
-	Origins	[]string 	`yaml:"origins"`
+	Enable  bool     `yaml:"enable"`
+	Methods []string `yaml:"methods"`
+	Origins []string `yaml:"origins"`
 }
 
 type ConfigYaml struct {
-	Name     string          	`yaml:"name"`
-	Host     string          	`yaml:"host"`
-	Port     int             	`yaml:"port"`
-	Services []ConfigService 	`yaml:"services"`
-	Cors     ConfigCors			 	`yaml:"cors"`
+	Name     string          `yaml:"name"`
+	Host     string          `yaml:"host"`
+	Port     int             `yaml:"port"`
+	Services []ConfigService `yaml:"services"`
+	Cors     ConfigCors      `yaml:"cors"`
 }
 
 var (

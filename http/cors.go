@@ -1,9 +1,9 @@
 package http
 
 import (
+	"github.com/libidev/requtrap.go/cli/config"
 	"net/http"
 	"strings"
-	"github.com/libidev/requtrap.go/cli/config"
 )
 
 func EnableCors(w *http.ResponseWriter, conf config.ConfigCors) {

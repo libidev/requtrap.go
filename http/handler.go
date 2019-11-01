@@ -11,7 +11,7 @@ import (
 
 type HttpHandler struct {
 	Routes []config.ConfigService
-	Cors config.ConfigCors
+	Cors   config.ConfigCors
 }
 
 func (h HttpHandler) GetRequestMethod(r *http.Request) string {
@@ -49,7 +49,7 @@ func (h HttpHandler) Gateway(w http.ResponseWriter, r *http.Request) func(config
 		reqbody, err = ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 		if err != nil {
-			http.Error(w,err.Error(),http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	}
 
@@ -66,21 +66,21 @@ func (h HttpHandler) Gateway(w http.ResponseWriter, r *http.Request) func(config
 
 		resp, err := client.Do(req)
 		if err != nil {
-			http.Error(w,err.Error(),http.StatusInternalServerError)
-      return
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		body, err := ioutil.ReadAll(resp.Body)
 		defer resp.Body.Close()
 		if err != nil {
-			http.Error(w,err.Error(),http.StatusInternalServerError)
-      return
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		fmt.Println("")
 		fmt.Println("Status :", resp.Status)
 		fmt.Println("Header :")
 		for k, v := range resp.Header {
-			fmt.Println("  ", k + ":", v[0])
+			fmt.Println("  ", k+":", v[0])
 		}
 		fmt.Println("Body   :", string(body))
 
