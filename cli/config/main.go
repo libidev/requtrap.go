@@ -6,17 +6,20 @@ import (
 	"io/ioutil"
 )
 
+// ConfigService Struct
 type ConfigService struct {
 	Path     string `yaml:"path"`
 	Upstream string `yaml:"upstream"`
 }
 
+// ConfigCors Struct
 type ConfigCors struct {
 	Enable  bool     `yaml:"enable"`
 	Methods []string `yaml:"methods"`
 	Origins []string `yaml:"origins"`
 }
 
+// ConfigYaml Struct
 type ConfigYaml struct {
 	Name     string          `yaml:"name"`
 	Host     string          `yaml:"host"`
@@ -26,6 +29,7 @@ type ConfigYaml struct {
 }
 
 var (
+	// Default config
 	Default = `
     name: book-store
     host: 127.0.0.1
@@ -49,6 +53,7 @@ var (
 	config = ConfigYaml{}
 )
 
+// Parse is config parser function
 func Parse(confile string) (*ConfigYaml, error) {
 	var err error
 	defer errors.IsError(err)
