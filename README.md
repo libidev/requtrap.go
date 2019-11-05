@@ -41,6 +41,16 @@ cors:
     - http://localhost:3000
 ```
 
+If your authentication service using JWT (JSON Web Token),
+just give little information on API gateway config. 
+
+```yml
+...
+authentication:
+  type: jwt
+  upstream: http://localhost:8000
+```
+
 # CLI Commands
 ### Starting API Gateway
 `requtrap start [path/to/configuration.yml]`
