@@ -23,13 +23,18 @@ services:
     upstream: http://127.0.0.1:8001
   - path: /authors
     upstream: http://127.0.0.1:8002
+.
+.
+.
 ```
 
 If you want to configure CORS, just put example bellow
 at bottom of YAML configuration file.
 
 ```yml
-...
+.
+.
+.
 cors:
   enable: true
   methods:
@@ -39,16 +44,24 @@ cors:
     - DELETE
   origins:
     - http://localhost:3000
+.
+.
+.
 ```
 
 If your authentication service using JWT (JSON Web Token),
 just give little information on API gateway config. 
 
 ```yml
-...
+.
+.
+.
 authentication:
   type: jwt
   upstream: http://localhost:8000
+.
+.
+.
 ```
 
 # CLI Commands
