@@ -19,13 +19,20 @@ type ConfigCors struct {
 	Origins []string `yaml:"origins"`
 }
 
+// ConfigAuthentication Struct
+type ConfigAuthentication struct {
+	Type     string `yaml:"type"`
+	Upstream string `yaml:"upstream"`
+}
+
 // ConfigYaml Struct
 type ConfigYaml struct {
-	Name     string          `yaml:"name"`
-	Host     string          `yaml:"host"`
-	Port     int             `yaml:"port"`
-	Services []ConfigService `yaml:"services"`
-	Cors     ConfigCors      `yaml:"cors"`
+	Name           string               `yaml:"name"`
+	Host           string               `yaml:"host"`
+	Port           int                  `yaml:"port"`
+	Services       []ConfigService      `yaml:"services"`
+	Authentication ConfigAuthentication `yaml:"authentication"`
+	Cors           ConfigCors           `yaml:"cors"`
 }
 
 var (
