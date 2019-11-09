@@ -27,9 +27,9 @@ type Authentication struct {
 
 // Yaml Struct
 type Yaml struct {
-	Name           string               `yaml:"name"`
-	Host           string               `yaml:"host"`
-	Port           int                  `yaml:"port"`
+	Name           string         `yaml:"name"`
+	Host           string         `yaml:"host"`
+	Port           int            `yaml:"port"`
 	Services       []Service      `yaml:"services"`
 	Authentication Authentication `yaml:"authentication"`
 	Cors           Cors           `yaml:"cors"`
