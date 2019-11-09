@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-func EnableCors(w *http.ResponseWriter, conf config.ConfigCors) {
+// EnableCors - Function to add CORS headers into HTTP response header
+func EnableCors(w *http.ResponseWriter, conf config.Cors) {
 	origins := strings.Join(conf.Origins, ",")
 	methods := strings.Join(conf.Methods, ",")
 

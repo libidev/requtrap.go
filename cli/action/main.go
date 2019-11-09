@@ -35,6 +35,6 @@ Example:
 
 // Start Action
 // Running API gateway server
-func Start(conf *config.ConfigYaml) {
+func Start(conf *config.Yaml) {
 	http.Serve(conf)
 }

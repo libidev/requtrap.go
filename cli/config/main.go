@@ -6,33 +6,33 @@ import (
 	"io/ioutil"
 )
 
-// ConfigService Struct
-type ConfigService struct {
+// Service Struct
+type Service struct {
 	Path     string `yaml:"path"`
 	Upstream string `yaml:"upstream"`
 }
 
-// ConfigCors Struct
-type ConfigCors struct {
+// Cors Struct
+type Cors struct {
 	Enable  bool     `yaml:"enable"`
 	Methods []string `yaml:"methods"`
 	Origins []string `yaml:"origins"`
 }
 
-// ConfigAuthentication Struct
-type ConfigAuthentication struct {
+// Authentication Struct
+type Authentication struct {
 	Type     string `yaml:"type"`
 	Upstream string `yaml:"upstream"`
 }
 
-// ConfigYaml Struct
-type ConfigYaml struct {
+// Yaml Struct
+type Yaml struct {
 	Name           string               `yaml:"name"`
 	Host           string               `yaml:"host"`
 	Port           int                  `yaml:"port"`
-	Services       []ConfigService      `yaml:"services"`
-	Authentication ConfigAuthentication `yaml:"authentication"`
-	Cors           ConfigCors           `yaml:"cors"`
+	Services       []Service      `yaml:"services"`
+	Authentication Authentication `yaml:"authentication"`
+	Cors           Cors           `yaml:"cors"`
 }
 
 var (
@@ -57,11 +57,11 @@ var (
 				- http://localhost:3000
 	`
 
-	config = ConfigYaml{}
+	config = Yaml{}
 )
 
 // Parse is config parser function
-func Parse(confile string) (*ConfigYaml, error) {
+func Parse(confile string) (*Yaml, error) {
 	var err error
 	defer errors.IsError(err)
 

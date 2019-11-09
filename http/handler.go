@@ -9,20 +9,24 @@ import (
 	"time"
 )
 
-type HttpHandler struct {
-	Routes []config.ConfigService
-	Cors   config.ConfigCors
+// Handler - main HTTP handler
+type Handler struct {
+	Routes []config.Service
+	Cors   config.Cors
 }
 
-func (h HttpHandler) GetRequestMethod(r *http.Request) string {
+// GetRequestMethod - to get request method, eg. GET, POST, PUT, etc
+func (h Handler) GetRequestMethod(r *http.Request) string {
 	return r.Method
 }
 
-func (h *HttpHandler) AddRoute(service config.ConfigService) {
+// AddRoute - to add service routes into route list
+func (h *Handler) AddRoute(service config.Service) {
 	h.Routes = append(h.Routes, service)
 }
 
-func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// ServeHTTP - entry point for HTTP handler
+func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if h.Cors.Enable {
 		EnableCors(&w, h.Cors)
 	}
@@ -41,7 +45,8 @@ func (h HttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h HttpHandler) Gateway(w http.ResponseWriter, r *http.Request) func(config.ConfigService) {
+// Gateway - frowarding client request to all services
+func (h Handler) Gateway(w http.ResponseWriter, r *http.Request) func(config.Service) {
 	var reqbody []byte
 	var err error
 
@@ -53,7 +58,7 @@ func (h HttpHandler) Gateway(w http.ResponseWriter, r *http.Request) func(config
 		}
 	}
 
-	return func(service config.ConfigService) {
+	return func(service config.Service) {
 		url := service.Upstream + service.Path
 		tr := &http.Transport{
 			MaxIdleConns:       10,
