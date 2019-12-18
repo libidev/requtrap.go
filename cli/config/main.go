@@ -4,6 +4,7 @@ import (
 	"log"
 	"io/ioutil"
 	"gopkg.in/yaml.v3"
+  "github.com/libidev/requtrap.go/cli"
 )
 
 type ConfigService struct {
@@ -33,15 +34,9 @@ var(
 	config = ConfigYaml{}
 )
 
-func isError(err error){
-  if err != nil {
-    log.Fatal("error: %v",err)
-  }
-}
-
 func Parse(confile string) (*ConfigYaml, error) {
 	var err error
-	defer isError(err)
+	defer cli.IsError(err)
 
 	f, err := ioutil.ReadFile(confile)
 	if err != nil {return nil, err}

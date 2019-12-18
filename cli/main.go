@@ -7,13 +7,13 @@ import (
   "github.com/libidev/requtrap.go/cli/config"
 )
 
-func isError(err error){
-  if err != nil {
-    log.Fatal("error: %v",err)
-  }
-}
+//func isError(err error){
+//  if err != nil {
+//    log.Fatal("error: %v",err)
+//  }
+//}
 
-func Parse(args []string) {
+func Parse(args []string){
 	var err error
 	defer isError(err)
 
