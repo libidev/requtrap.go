@@ -69,6 +69,12 @@ func (h Handler) Gateway(w http.ResponseWriter, r *http.Request) func(config.Ser
 		req, err := http.NewRequest(h.GetRequestMethod(r), url, bytes.NewBuffer(reqbody))
 		req.Header.Set("Content-type", "application/json")
 
+		//Get header request from expose-headers list
+		for _,header := range h.Cors.ExposeHeaders {
+			value := r.Header.Get(header)
+			req.Header.Set(header, value)
+		}
+
 		resp, err := client.Do(req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -85,6 +91,8 @@ func (h Handler) Gateway(w http.ResponseWriter, r *http.Request) func(config.Ser
 		fmt.Println("Status :", resp.Status)
 		fmt.Println("Header :")
 		for k, v := range resp.Header {
+			//Set header respone result from expose-headers list
+			w.Header().Set(k, v[0])
 			fmt.Println("  ", k+":", v[0])
 		}
 		fmt.Println("Body   :", string(body))

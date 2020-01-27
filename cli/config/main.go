@@ -17,6 +17,7 @@ type Cors struct {
 	Enable  bool     `yaml:"enable"`
 	Methods []string `yaml:"methods"`
 	Origins []string `yaml:"origins"`
+	ExposeHeaders []string `yaml:"expose-headers"`
 }
 
 // Authentication Struct
