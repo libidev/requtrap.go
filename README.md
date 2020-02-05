@@ -58,7 +58,10 @@ just give little information on API gateway config.
 .
 authentication:
   type: jwt
-  upstream: http://localhost:8000
+  upstream: http://localhost:8000/auth
+  path:
+    - http://localhost:8001/
+    - http://localhost:8002/
 .
 .
 .
