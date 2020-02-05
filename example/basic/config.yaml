@@ -1,8 +1,14 @@
 name: book-store
 host: 127.0.0.1
-port: 8080
+port: 3030
 services:
   - path: /books
     upstream: http://127.0.0.1:8001
   - path: /authors
     upstream: http://127.0.0.1:8002
+authentication:
+  type: jwt
+  upstream: http://127.0.0.1:8000/auth/
+  path:
+    - http://127.0.0.1:8003/
+    - http://127.0.0.1:8004/

@@ -3,16 +3,18 @@ package http
 import (
 	"bytes"
 	"fmt"
-	"github.com/libidev/requtrap.go/cli/config"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/libidev/requtrap.go/cli/config"
 )
 
 // Handler - main HTTP handler
 type Handler struct {
 	Routes []config.Service
 	Cors   config.Cors
+	Auth   config.Authentication
 }
 
 // GetRequestMethod - to get request method, eg. GET, POST, PUT, etc
@@ -65,9 +67,16 @@ func (h Handler) Gateway(w http.ResponseWriter, r *http.Request) func(config.Ser
 			IdleConnTimeout:    30 * time.Second,
 			DisableCompression: true,
 		}
+
 		client := &http.Client{Transport: tr}
+
 		req, err := http.NewRequest(h.GetRequestMethod(r), url, bytes.NewBuffer(reqbody))
 		req.Header.Set("Content-type", "application/json")
+
+		auth := h.validateAuth(r, url)
+		fmt.Println(auth)
+		if auth {
+		}
 
 		resp, err := client.Do(req)
 		if err != nil {

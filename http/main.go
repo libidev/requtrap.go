@@ -2,10 +2,11 @@ package http
 
 import (
 	"fmt"
-	"github.com/libidev/requtrap.go/cli/config"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/libidev/requtrap.go/cli/config"
 )
 
 // Serve - run HTTP Server
@@ -21,6 +22,7 @@ func Serve(conf *config.Yaml) {
 		handler.AddRoute(service)
 	}
 	handler.Cors = conf.Cors
+	handler.Auth = conf.Authentication
 
 	err := http.ListenAndServe(uri, handler)
 	if err != nil {
