@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// Book - book struct for json
 type Book struct {
 	Name  string `json:"name"`
 	Pages int    `json:"pages"`
