@@ -1,22 +1,26 @@
 package config
 
 import (
+	"os"
+
 	"github.com/libidev/requtrap.go/cli/errors"
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
 )
 
 // Service Struct
 type Service struct {
-	Path     string `yaml:"path"`
-	Upstream string `yaml:"upstream"`
+	Path            string `yaml:"path"`
+	Upstream        string `yaml:"upstream"`
+	MaxIdleConn     int    `yaml:"max_idle_conn"`
+	IdleConnTimeout string `yaml:"idle_conn_timeout"`
+	Cors            Cors   `yaml:"cors"`
 }
 
 // Cors Struct
 type Cors struct {
-	Enable  bool     `yaml:"enable"`
-	Methods []string `yaml:"methods"`
-	Origins []string `yaml:"origins"`
+	Enable        bool     `yaml:"enable"`
+	Methods       []string `yaml:"methods"`
+	Origins       []string `yaml:"origins"`
 	ExposeHeaders []string `yaml:"expose-headers"`
 }
 
@@ -64,13 +68,9 @@ var (
 // Parse is config parser function
 func Parse(confile string) (*Yaml, error) {
 	var err error
-<<<<<<< HEAD
-	defer cli.IsError(err)
-=======
 	defer errors.IsError(err)
->>>>>>> 4f479139fe33164a3d363d06d93c4910d263bfd8
 
-	f, err := ioutil.ReadFile(confile)
+	f, err := os.ReadFile(confile)
 	if err != nil {
 		return nil, err
 	}

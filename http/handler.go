@@ -2,17 +2,23 @@ package http
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
-	"github.com/libidev/requtrap.go/cli/config"
-	"io/ioutil"
+	"io"
 	"net/http"
-	"time"
+	"strings"
+	"sync"
+
+	"github.com/libidev/requtrap.go/cli/config"
+	"github.com/libidev/requtrap.go/pkg/constants"
+	"github.com/libidev/requtrap.go/pkg/utils"
 )
 
 // Handler - main HTTP handler
 type Handler struct {
-	Routes []config.Service
-	Cors   config.Cors
+	Routes  map[string]config.Service
+	Cors    config.Cors
+	Circuit CircuitBreaker
 }
 
 // GetRequestMethod - to get request method, eg. GET, POST, PUT, etc
@@ -22,7 +28,7 @@ func (h Handler) GetRequestMethod(r *http.Request) string {
 
 // AddRoute - to add service routes into route list
 func (h *Handler) AddRoute(service config.Service) {
-	h.Routes = append(h.Routes, service)
+	h.Routes[service.Path] = service
 }
 
 // ServeHTTP - entry point for HTTP handler
@@ -36,55 +42,88 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.URL.Path != "favicon.ico" {
-		for _, service := range h.Routes {
-			path := r.URL.Path
-			if path == service.Path {
-				h.Gateway(w, r)(service)
-			}
+
+		path := r.URL.Path
+
+		segments := strings.Split(path, "/")
+		if len(segments) == 0 {
+			return
+		}
+
+		service, ok := h.Routes["/"+segments[1]]
+		if !ok {
+			http.Error(w, "Service not found", http.StatusNotFound)
+			return
+		}
+
+		fn := h.Gateway(w, r)
+		err := h.Circuit.Call(fn, service, utils.StringToTimeDuration(service.IdleConnTimeout))
+		if err != nil && errors.Is(err, constants.ERR_CIRCUIT_OPEN) {
+			http.Error(w, "Service is not available", http.StatusServiceUnavailable)
 		}
 	}
 }
 
 // Gateway - frowarding client request to all services
-func (h Handler) Gateway(w http.ResponseWriter, r *http.Request) func(config.Service) {
+func (h Handler) Gateway(w http.ResponseWriter, r *http.Request) func(config.Service) error {
 	var reqbody []byte
 	var err error
 
 	if h.GetRequestMethod(r) == http.MethodPost {
-		reqbody, err = ioutil.ReadAll(r.Body)
+		reqbody, err = io.ReadAll(r.Body)
 		defer r.Body.Close()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	}
 
-	return func(service config.Service) {
+	return func(service config.Service) error {
 		url := service.Upstream + service.Path
+
+		if service.MaxIdleConn == 0 {
+			service.MaxIdleConn = 10
+		}
+
 		tr := &http.Transport{
-			MaxIdleConns:       10,
-			IdleConnTimeout:    30 * time.Second,
+			MaxIdleConns:       service.MaxIdleConn,
+			IdleConnTimeout:    utils.StringToTimeDuration(service.IdleConnTimeout),
 			DisableCompression: true,
 		}
 		client := &http.Client{Transport: tr}
 		req, err := http.NewRequest(h.GetRequestMethod(r), url, bytes.NewBuffer(reqbody))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return err
+		}
 		req.Header.Set("Content-type", "application/json")
 
-		//Get header request from expose-headers list
-		for _,header := range h.Cors.ExposeHeaders {
-			value := r.Header.Get(header)
-			req.Header.Set(header, value)
+		var setCors = func(wg *sync.WaitGroup, r *http.Request, exposeHeaders []string) {
+			defer wg.Done()
+			for _, header := range exposeHeaders {
+				value := r.Header.Get(header)
+				req.Header.Set(header, value)
+			}
 		}
+
+		var wg sync.WaitGroup
+		wg.Add(2)
+
+		//Set header request from expose-headers list
+		go setCors(&wg, r, h.Cors.ExposeHeaders)
+		go setCors(&wg, r, service.Cors.ExposeHeaders)
+
+		wg.Wait()
 
 		resp, err := client.Do(req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			return err
 		}
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
 		defer resp.Body.Close()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			return err
 		}
 
 		fmt.Println("")
@@ -99,5 +138,7 @@ func (h Handler) Gateway(w http.ResponseWriter, r *http.Request) func(config.Ser
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(body)
+
+		return nil
 	}
 }
