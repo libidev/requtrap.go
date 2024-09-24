@@ -2,10 +2,11 @@ package http
 
 import (
 	"fmt"
-	"github.com/libidev/requtrap.go/cli/config"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/libidev/requtrap.go/cli/config"
 )
 
 // Serve - run HTTP Server
@@ -16,7 +17,12 @@ func Serve(conf *config.Yaml) {
 
 	fmt.Printf("%s running on http://%s\n", conf.Name, uri)
 
-	handler := &Handler{}
+	handler := &Handler{
+		Routes: make(map[string]config.Service),
+		Circuit: CircuitBreaker{
+			Circuit: make(map[string]*Circuit),
+		},
+	}
 	for _, service := range conf.Services {
 		handler.AddRoute(service)
 	}
